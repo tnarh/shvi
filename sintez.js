@@ -74,13 +74,6 @@ const tokenize = (input) => {
   if (input == []) return [];
 
   const l = input.split(" ");
-  for (let i = 0; i < l.length; ++i) {
-    if (isNumeric(l[i])) {
-      l[i] = Number(l[i]);
-    } else {
-      l[i] = atom(l[i]);
-    }
-  }
 
-  return l;
+  return l.map((e) => isNumeric(e) ? e = Number(e) : e = atom(e));
 };
