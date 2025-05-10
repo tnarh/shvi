@@ -8,6 +8,10 @@ export { encodeWAV, generatePCM, tokenize };
 //   R: Sample rate (samples per second), typically 44100 Hz
 //   n: Sample number (integer), from 0 to R × duration − 1
 
+function isNumeric(value) {
+  return /^-?\d+$/.test(value.replace(".", ""));
+}
+
 function generatePCM(frequency, duration) {
   const amplitude = 32767;
   const sampleRate = 44100;
@@ -67,5 +71,16 @@ async function encodeWAV(
 const atom = (name) => Symbol.for(name);
 
 const tokenize = (input) => {
-  throw new Error("Not implemented");
+  if (input == []) return [];
+
+  const l = input.split(" ");
+  for (let i = 0; i < l.length; ++i) {
+    if (isNumeric(l[i])) {
+      l[i] = Number(l[i]);
+    } else {
+      l[i] = atom(l[i]);
+    }
+  }
+
+  return l;
 };
