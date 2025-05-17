@@ -77,7 +77,8 @@ const atom = (name) => {
 };
 
 const typeify = (token) => {
-  throw new Error("Not implemented");
+  const parsedNumber = Number.parseFloat(token, 10);
+  return Number.isNaN(parsedNumber) ? Symbol.for(token) : parsedNumber;
 };
 
 const tokenize = (input) => {
