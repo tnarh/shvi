@@ -68,24 +68,52 @@ async function encodeWAV(
   );
 }
 
-const atom = (name) => Symbol.for(name);
+const atom = (name) => {
+  if (isNumeric(name)) {
+    return parseFloat(name);
+  } else {
+    return Symbol.for(name);
+  }
+};
 
 const typeify = (token) => {
   throw new Error("Not implemented");
 };
 
 const tokenize = (input) => {
-  if (input == []) return [];
+  const stack = [[]];
+  let token = "";
 
-  const loop = (
-    progressiveScope,
-    [graphemeAtHand, ...restOfGraphemes],
-    tokenSoFar = "",
-  ) => {
-    throw new Error("Not implemented");
+  const sik = () => {
+    if (token !== "") {
+      stack[stack.length - 1].push(atom(token));
+      token = "";
+    }
   };
 
-  return loop([[]], graphemes);
+  for (let i = 0; i < input.length; ++i) {
+    const char = input[i];
+
+    if (char === "(") {
+      sik();
+      const newList = [];
+      stack[stack.length - 1].push(newList);
+      stack.push(newList);
+    } else if (char === ")") {
+      sik();
+      if (stack.length === 1) {
+        console.log("tupoi");
+      }
+      stack.pop();
+    } else if (char === " ") {
+      sik();
+    } else {
+      token += char;
+    }
+  }
+
+  sik();
+  return stack[0];
 };
 
 const evaluate = (expression) => {
@@ -94,5 +122,11 @@ const evaluate = (expression) => {
   //   assume the first element is a function and the rest are arguments
   //   evaluate the function with the arguments
 
-  throw new Error("Not implemented");
+  if (isNumeric(expression)) {
+    return expression;
+  } else if (Array.isArray(expression)) {
+    return expression[0](...expression.slice(1));
+  } else {
+    console.log("TUPOI");
+  }
 };
