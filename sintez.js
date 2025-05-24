@@ -29,8 +29,9 @@ function generatePCM(frequency, duration) {
 }
 
 function sequence(...PCMs) {
+  let result = [];
   for (let i = 0; i < PCMs.length; ++i) {
-    evaluate(PCMs[i]);
+    result = result.concat(PCMs[i]);
   }
 }
 
@@ -130,7 +131,11 @@ const evaluate = (expression) => {
   //   evaluate the function with the arguments
   console.log(expression);
   if (Array.isArray(expression)) {
-    return generatePCM(...expression.slice(1));
+    if (expression[0] == atom("tone")) {
+      return generatePCM(...expression.slice(1));
+    } else if (expression[0] == atom("sequence")) {
+      return sequence(...expression.slice(1).map(evaluate));
+    }
   } else if (isNumeric(expression)) {
     return expression;
   } else {
