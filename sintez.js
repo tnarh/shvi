@@ -121,11 +121,11 @@ const evaluate = (expression) => {
   // If it is an array,
   //   assume the first element is a function and the rest are arguments
   //   evaluate the function with the arguments
-
-  if (isNumeric(expression)) {
+  console.log(expression);
+  if (Array.isArray(expression)) {
+    return generatePCM(...expression.slice(1));
+  } else if (isNumeric(expression)) {
     return expression;
-  } else if (Array.isArray(expression)) {
-    return expression[0](...expression.slice(1));
   } else {
     console.log("TUPOI");
   }
