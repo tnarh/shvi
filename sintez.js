@@ -29,9 +29,9 @@ function generatePCM(frequency, duration) {
 }
 
 function sequence(...PCMs) {
-  throw new Error(
-    "🪈 The `sequence` function is not implemented yet.",
-  );
+  for (let i = 0; i < PCMs.length; ++i) {
+    evaluate(PCMs[i]);
+  }
 }
 
 async function encodeWAV(
